@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Share with Node</title>
+
+</head>
+
+<body>
+  <div id="errordiv"></div>
+  <div class="pathContainer">
+    <span>Setup File Path</span>
+    <div class="inputGroup" id="inputgrp">
+      <input id="filePath" placeholder="e.g. C:/User/YourName/Documents" type="text" />
+      <!-- <button class="pathbtn" id="setup">Save</button> -->
+    </div>
+    <div class="inputGroup" id="inputgrp">
+      <input id="passwrd" placeholder="password" type="password" />
+      <!-- <button class="pathbtn" id="">Save</button> -->
+    </div>
+    <div class="center">
+      <button class="save" id="setup">Save</button>
+    </div>
+  </div>
+  <div class="center"><button id="server" class="strtbtn">Start Server</button></div>
+
+  <div class="qrsec" id="Qr">
+
+  </div>
+  <script type="module" src="/src/renderer.js"></script>
+</body>
+
+</html>

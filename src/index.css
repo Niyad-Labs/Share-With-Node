@@ -1,0 +1,99 @@
+*{
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: auto;
+  padding: 0;
+  box-sizing: border-box;
+  max-width: 38rem;
+}
+body{
+  height: 100vh;
+  padding: 10px 10px ;
+  background: linear-gradient(134deg, #0e0e0e, #434343)
+}
+input{
+  all:unset;
+}
+button{
+   all:unset;
+}
+.pathContainer{
+    display: flex;
+    /* background: #232222; */
+background: linear-gradient(134deg, #555555, #000000);
+    width: 100%;
+    color: rgb(255 255 255);
+    padding: 10px 10px 17px;
+    border-radius: 10px;
+    flex-direction: column;
+    box-shadow: 0px 0px 6px 0px #0c0c0c;
+}
+.pathContainer span{
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.inputGroup{
+border: solid 1px #686868;
+    border-radius: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+}
+.inputGroup input {
+  padding: 5px 7px;;
+  width: 100%;
+}
+.center{
+  display: flex;
+      justify-content: center;
+      width: 100%;
+}
+.pathbtn{
+    background: #5b5b5b;
+    padding: 5px 7px;
+    color: #fff;
+    width: 45px;
+    text-align: center;
+    border-radius: 0 50px 50px 0;
+}
+
+
+.qrsec{
+  display: flex;
+    align-content: center;
+    justify-content: center;
+    height: 200px;
+    width: 100%;
+}
+
+.strtbtn{
+  padding: 5px 10px;
+  background: linear-gradient(134deg, #0e0e0e, #434343);
+   box-shadow: 0px 0px 6px 0px #0c0c0c;
+   border-radius: 50px;
+   margin: 15px auto;
+   color: #fff;
+}
+.save{
+    padding: 5px 10px;
+    width: 70%;
+  background: linear-gradient(134deg, #0e0e0e, #434343);
+   box-shadow: 0px 0px 6px 0px #0c0c0c;
+   /* border-radius: 50 */
+   text-align: center;
+   margin: 15px auto;
+   color: #fff;
+}
+
+#errordiv{
+     width: 100%;
+    padding: 10px;
+    height: min-content;
+    background: red;
+    color: #fff;
+    min-height: 30px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: none;
+}
