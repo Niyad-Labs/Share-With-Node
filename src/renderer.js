@@ -49,6 +49,8 @@ window.api.onQrImg((dataUrl) => {
   qrdiv.append(qrimg)
 })
 
+
+
 window.api.onload((path, psswd) => {
   console.log("path", path, psswd);
   if (path) {
@@ -102,4 +104,16 @@ document.getElementById("server").addEventListener("click", async () => {
   } catch (error) {
     console.log(error);
   }
+})
+
+
+window.api.onUserConnected((user) => {
+  const head = document.getElementById("head")
+  if (head.style.display == "none") {
+    head.style.display = "block"
+  }
+  const ul = document.getElementById("userU")
+  const li = document.createElement("li")
+  li.textContent = user
+  ul.append(li)
 })

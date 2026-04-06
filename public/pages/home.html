@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Share</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .container {
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .circle-btn {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: white;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .circle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .circle-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Mobile */
+        @media (max-width: 500px) {
+            .buttons {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .circle-btn {
+                width: 100px;
+                height: 100px;
+                font-size: 16px;
+            }
+
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-content: space-around;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Select Mode</h1>
+
+        <div class="buttons">
+            <a id="send" class="circle-btn">Send</a>
+            <a id="receive" class="circle-btn">Receive</a>
+        </div>
+    </div>
+    <script>
+        document.getElementById('send').setAttribute('href', `./recieve`)
+        document.getElementById('receive').setAttribute('href', `./files`)
+    </script>
+</body>
+
+</html>

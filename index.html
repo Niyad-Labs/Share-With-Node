@@ -25,7 +25,34 @@
   </div>
   <div class="center"><button id="server" class="strtbtn">Start Server</button></div>
 
-  <div class="qrsec" id="Qr">
+  <div class="qrsec" id="Qr"></div>
+  <style>
+    .head1 {
+      color: #cacaca;
+    }
+
+    .connectedSec {
+      padding: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #50505085;
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 5px;
+      color: #fff;
+    }
+  </style>
+  <div class="connectedSec">
+    <h1 class="head1" id="head" style="display: none;">Connected User</h1>
+    <ul id="userU">
+
+    </ul>
 
   </div>
   <script type="module" src="/src/renderer.js"></script>

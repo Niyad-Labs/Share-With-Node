@@ -3,6 +3,9 @@
 
 <head>
     <title>Password Access</title>
+    <!-- Responsive meta tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         body {
             margin: 0;
@@ -16,35 +19,41 @@
 
         .container {
             background: #fff;
-            padding: 30px;
+            padding: 20px;
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             text-align: center;
-            width: 300px;
+            width: 85%;
+            /* Make container flexible */
+            max-width: 400px;
+            /* Limit width on PC */
         }
 
         h2 {
             margin-bottom: 20px;
+            font-size: 1.5em;
+            /* Responsive font */
         }
 
         input {
             width: 100%;
-            padding: 10px;
+            margin: 0;
+            padding: 12px 0;
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: 1em;
         }
 
         button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background: #1e1e2f;
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 1em;
         }
 
         button:hover {
@@ -53,31 +62,57 @@
 
         .error {
             color: red;
-            font-size: 14px;
+            font-size: 0.9em;
             margin-top: 10px;
+        }
+
+        .success {
+            color: green;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        /* Optional: make input & button bigger on small screens */
+        @media (max-width: 400px) {
+
+            input,
+            button {
+                font-size: 1.1em;
+                padding: 14px 0;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <h2>Enter Password</h2>
+    <form id="loginform" method="post">
+        <div class="container">
+            <h2>Enter Password</h2>
 
-        <input type="password" id="password" placeholder="Password" />
+            <input type="password" name="password" id="password" placeholder=" Password" />
 
-        <button onclick="checkPassword()">Submit</button>
+            <button onclick="checkPassword()">Submit</button>
 
-        <div id="error" class="error"></div>
-    </div>
+            <div id="error" class="error"></div>
+            <div id="success" class="success"></div>
+        </div>
+    </form>
 
     <script>
-        // function checkPassword() {
-        // const password = document.getElementById("password").value;
-        // const error = document.getElementById("error");
+        const form = document.getElementById('loginform')
+        form.action = window.location.pathname
+        form.addEventListener("submit", () => {
+            const password = document.getElementById("password").value;
+            const error = document.getElementById("error");
+            const success = document.getElementById("success");
+            if (!password) {
+                error.textContent = "Password required";
+                return false;
+            }
+            return true
 
-
-        // }
+        })
     </script>
 
 </body>

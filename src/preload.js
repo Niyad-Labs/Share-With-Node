@@ -12,6 +12,9 @@ contextBridge.exposeInMainWorld("api", {
     onload: (callback) => {
         ipcRenderer.on("load", (event, data) => callback(data))
     },
+    onUserConnected: (callback) => {
+        ipcRenderer.on("connected-user", (event, data) => callback(data))
+    },
     sendData: (data) => {
         ipcRenderer.send("send-Data", data)
     },

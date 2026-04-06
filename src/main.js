@@ -9,13 +9,17 @@ import Store from 'electron-store'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import login from '../routes/login'
+import home from '../routes/home'
+import files from '../routes/files'
+import session from 'express-session'
+import dotenv from 'dotenv'
 
 
 let mainWindow;
 const store = new Store();
 let ROOT_DIR = "";
 let token = crypto.randomBytes(16).toString("hex")
-
+dotenv.config()
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -94,8 +98,7 @@ ipcMain.on("send-Data", async (event, data) => {
     ROOT_DIR = data.path
     if (data.password) {
       const hash = await bcrypt.hash(data.password, 10)
-      console.log(hash);
-      store.set("password", data.password)
+      store.set("password", hash)
     }
   } catch (error) {
     mainWindow.webContents.send("connection-error", "saving have issue");
@@ -137,69 +140,20 @@ async function getLocalIPQr() {
 
 const appServer = express();
 appServer.use(express.static("public"));
+appServer.use(express.json())
+appServer.use(express.urlencoded({ extended: true }))
+// appServer.locals.token = token;
+appServer.use(session({
+  secret: process.env.SECRET_KEY,
+  resave: false,
+  saveUninitailized: true,
+
+}))
+
 
 appServer.use(`/${token}/login`, login)
-appServer.get(`/${token}/files`, (req, res) => {
-  let relativePath = req.query.path || "";
-
-  // Prevent path traversal(security fix)
-  relativePath = path.normalize(relativePath).replace(/^(\.\.[\/\\])+/, "");
-
-  const dirPath = path.join(ROOT_DIR, relativePath);
-
-  console.log("Opening folder:", dirPath);
-
-  fs.readdir(dirPath, { withFileTypes: true }, (err, files) => {
-    if (err) {
-      console.error(err);
-      return res.send(`<h3>❌ Error reading folder</h3><p>${err.message}</p>`);
-    }
-
-    let html = `<h2>📁 File Browser</h2> 
-<style>
-ul{
-    all: unset;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: flex-start;
-}
-li{
-    width: 100px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    margin: 10px;
-    height: 150px;
-}
-a {
-    all: unset;
-}
-</style>
-<ul>`;
-
-    // Back button
-    if (relativePath) {
-      const parent = path.dirname(relativePath);
-      html += `<li><a href="/?path=${parent === '.' ? '' : parent}">⬅ Back</a></li>`;
-    }
-
-    files.forEach(file => {
-      const filePath = path.join(relativePath, file.name);
-      const ext = path.extname(file.name)
-      if (file.isDirectory()) {
-        html += `<a href="/?path=${filePath}"><li><img src="/folder.jfif" alt="folder"><span> ${file.name}</span></li></a>`;
-      } else if (['.mkv', '.mp4'].includes(ext)) {
-        html += `<a href="/video?file=${filePath}"><li><img src="/videoicon.jpg" alt="folder"><span>${file.name}</span></li></a>`;
-      } else {
-        html += `<a href="/video?file=${filePath}"><li><img src="/uknownFile.png" alt="folder"><span>${file.name}</span></li></a>`;
-      }
-    });
-
-    html += `</ul>`;
-    res.send(html);
-  });
-});
+appServer.use(`/${token}/home`, home)
+appServer.use(`/${token}/files`, files)
 
 let serverRunning = false
 let server = null
@@ -226,3 +180,8 @@ ipcMain.handle("toggle-server", async () => {
   return serverRunning
 })
 
+export function sendToRenderer(channel, data) {
+  console.log(channel, data);
+
+  mainWindow.webContents.send(channel, data)
+}
