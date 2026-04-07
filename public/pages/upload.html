@@ -111,7 +111,7 @@
             formData.append("file", file);
 
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", "http://localhost:3000/upload", true);
+            xhr.open("POST", window.location.href, true);
 
             xhr.upload.onprogress = function (e) {
                 if (e.lengthComputable) {
@@ -126,7 +126,7 @@
                 if (xhr.status === 200) {
                     document.getElementById("status").innerText = "✅ Upload complete!";
                 } else {
-                    document.getElementById("status").innerText = "❌ Upload failed!";
+                    document.getElementById("status").innerText = "❌ Upload failed!" + xhr.status;
                 }
             };
 

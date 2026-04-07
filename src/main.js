@@ -10,9 +10,12 @@ import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import login from '../routes/login'
 import home from '../routes/home'
+import upload from '../routes/upload'
 import files from '../routes/files'
 import session from 'express-session'
 import dotenv from 'dotenv'
+import cors from 'cors'
+
 
 
 let mainWindow;
@@ -142,6 +145,7 @@ const appServer = express();
 appServer.use(express.static("public"));
 appServer.use(express.json())
 appServer.use(express.urlencoded({ extended: true }))
+appServer.use(cors());
 // appServer.locals.token = token;
 appServer.use(session({
   secret: process.env.SECRET_KEY,
@@ -154,6 +158,7 @@ appServer.use(session({
 appServer.use(`/${token}/login`, login)
 appServer.use(`/${token}/home`, home)
 appServer.use(`/${token}/files`, files)
+appServer.use(`/${token}/upload`, upload)
 
 let serverRunning = false
 let server = null
