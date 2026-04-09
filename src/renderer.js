@@ -52,7 +52,6 @@ window.api.onQrImg((dataUrl) => {
 
 
 window.api.onload((path, psswd) => {
-  console.log("path", path, psswd);
   if (path) {
     document.getElementById("filePath").value = path;
   }

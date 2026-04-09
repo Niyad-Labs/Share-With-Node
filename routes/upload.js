@@ -1,11 +1,11 @@
 import express from 'express'
 import path from 'node:path'
 import os from 'os'
+import { app } from 'electron';
 import multer from 'multer'
 
 const router = express.Router()
 const downloadPath = path.join(os.homedir(), "Downloads")
-console.log(downloadPath);
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -22,7 +22,9 @@ const upload = multer({
 });
 
 router.get('/', (req, res) => {
-    res.sendFile(path.join(process.cwd(), "public", "pages", "upload.html"))
+    const isDev = !app.isPackaged;
+    const basePath = isDev ? path.join(process.cwd(), "public") : path.join(process.resourcesPath, "public")
+    res.sendFile(path.join(basePath, "pages", "upload.html"))
 })
 
 router.post("/", (req, res) => {

@@ -1,10 +1,9 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import qrcode from 'qrcode'
 import os from 'os'
 import express from 'express'
-import fs from 'fs'
 import Store from 'electron-store'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
@@ -32,19 +31,18 @@ if (started) {
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
+    width: 550,
     height: 600,
 
     minWidth: 400,
     minHeight: 500,
 
-    maxWidth: 800,
+    maxWidth: 600,
     maxHeigth: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
-
   mainWindow.webContents.on("did-finish-load", () => {
     ROOT_DIR = store.get("path");
     const passwrd = store.get("password")
@@ -60,12 +58,12 @@ const createWindow = () => {
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools();
   } else {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -73,7 +71,26 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
-
+  // Menu.setApplicationMenu(null)
+  const template = [
+    {
+      label: "File",
+      submenu: [
+        { role: "quit" }
+      ]
+    },
+    {
+      label: "Edit",
+      subMenu: [
+        { role: "copy" },
+        { role: "paste" },
+        { role: "undo" },
+        { role: "redo" },
+      ]
+    }
+  ]
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   app.on('activate', () => {
@@ -129,6 +146,11 @@ async function getLocalIPQr() {
       mainWindow.webContents.send("connection-error", "No Wifi or Ethernet connection");
       return;
     }
+    if (store.get("password") && store.get("path")) {
+      mainWindow.webContents.send("connection-error", "Fill up path and password");
+      return
+    }
+
     const qrImg = await qrcode.toDataURL(`http://${foundIP}:5147/${token}/login`);
     mainWindow.webContents.send("qrImage", qrImg);
 
@@ -138,17 +160,18 @@ async function getLocalIPQr() {
   }
 }
 
-
+const isDev = !app.isPackaged;
+const basePath = isDev ? "public" : path.join(process.resourcesPath, "public")
 
 
 const appServer = express();
-appServer.use(express.static("public"));
+appServer.use(express.static(basePath));
 appServer.use(express.json())
 appServer.use(express.urlencoded({ extended: true }))
 appServer.use(cors());
 // appServer.locals.token = token;
 appServer.use(session({
-  secret: process.env.SECRET_KEY,
+  secret: process.env.SECRET_KEY || "hello",
   resave: false,
   saveUninitailized: true,
 
@@ -168,7 +191,7 @@ ipcMain.handle("toggle-server", async () => {
 
   if (serverRunning) {
     getLocalIPQr()
-    server = appServer.listen(5147, "0.0.0.0", () => {
+    server = appServer.listen(process.env.PORT_SERVER || 5147, "0.0.0.0", () => {
       console.log("Server running:5147 ");
     });
     server.on("connection", (conn) => {
@@ -186,7 +209,5 @@ ipcMain.handle("toggle-server", async () => {
 })
 
 export function sendToRenderer(channel, data) {
-  console.log(channel, data);
-
   mainWindow.webContents.send(channel, data)
 }

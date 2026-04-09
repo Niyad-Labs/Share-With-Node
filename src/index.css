@@ -6,8 +6,8 @@
   max-width: 38rem;
 }
 body{
-  height: 100%;
-  padding: 10px 10px 0 ;
+  height: 100vh;
+  padding: 10px 10px;
   background: linear-gradient(134deg, #0e0e0e, #434343)
 }
 input{

@@ -3,6 +3,7 @@ import path from 'node:path'
 import bcrypt from 'bcryptjs'
 import Store from 'electron-store'
 import { sendToRenderer } from '../src/main'
+import { app } from 'electron';
 
 
 const router = express.Router()
@@ -10,7 +11,10 @@ const store = new Store();
 let count = 0
 
 router.get('/', (req, res) => {
-    res.sendFile(path.join(process.cwd(), "public", "pages", "login.html"))
+    const isDev = !app.isPackaged;
+    const basePath = isDev ? path.join(process.cwd(), "public") : path.join(process.resourcesPath, "public")
+
+    res.sendFile(path.join(basePath, "pages", "login.html"))
 })
 
 router.post('/', (req, res) => {
