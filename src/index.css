@@ -4,9 +4,13 @@
   padding: 0;
   box-sizing: border-box;
   max-width: 38rem;
+  transition: all 0.3s ease;
+}
+html{
+  height: 100%;
 }
 body{
-  height: 100vh;
+  height: 100%;
   padding: 10px 10px;
   background: linear-gradient(134deg, #0e0e0e, #434343)
 }
@@ -15,6 +19,13 @@ input{
 }
 button{
    all:unset;
+}
+button:hover{
+  transform: translateY(-2px);
+}
+button:active{
+  transform: scale(0.95);
+  background: #2a2a2b;
 }
 .pathContainer{
     display: flex;

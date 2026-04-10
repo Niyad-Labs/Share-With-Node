@@ -144,15 +144,16 @@ async function getLocalIPQr() {
 
     if (!foundIP) {
       mainWindow.webContents.send("connection-error", "No Wifi or Ethernet connection");
-      return;
+      return false;
     }
-    if (store.get("password") && store.get("path")) {
+    if (!store.get("password") && !store.get("path")) {
       mainWindow.webContents.send("connection-error", "Fill up path and password");
-      return
+      return false
     }
 
     const qrImg = await qrcode.toDataURL(`http://${foundIP}:5147/${token}/login`);
     mainWindow.webContents.send("qrImage", qrImg);
+    return true
 
   } catch (err) {
     console.error("Error generating QR code:", err);
@@ -190,7 +191,11 @@ ipcMain.handle("toggle-server", async () => {
   serverRunning = !serverRunning
 
   if (serverRunning) {
-    getLocalIPQr()
+    const status = getLocalIPQr()
+    if (!status) {
+      serverRunning = !serverRunning
+      return serverRunning
+    }
     server = appServer.listen(process.env.PORT_SERVER || 5147, "0.0.0.0", () => {
       console.log("Server running:5147 ");
     });
