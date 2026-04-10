@@ -25,11 +25,14 @@ videos over a local network using QR code-based connection
 
 ## Screenshots
 
-![Home](screenshots/home.jpg)<br>
-<img src="screenshots/12.jpeg" width="300" >
-<img src="screenshots/13.jpeg" width="300">><br>
-<img src="screenshots/14.jpeg" width="300"><br>
-
+<div align="center">
+<img src="screenshots/home.jpg"  >
+</div>
+<div style="display:flex;margin-top:10px; justify-content:space-around ">
+<img src="screenshots/12.jpeg" width="250" >
+<img src="screenshots/13.jpeg" width="250">
+<img src="screenshots/14.jpeg" width="250">
+</div>
 ---
 
 ## 📲 Usage
