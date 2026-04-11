@@ -21,7 +21,25 @@ videos over a local network using QR code-based connection
 
 ## Download
 
-👉 [Download Latest Release](https://github.com/Niyad-Labs/Share-With-Node/releases/download/v1.0.0/sharewithnodee-1.0.0.Setup.exe)
+Download Latest Release
+
+👉 [Click here for EXE file](https://github.com/Niyad-Labs/Share-With-Node/releases/download/v1.0.0/sharewithnodee-1.0.0.Setup.exe)
+
+👉 [Click here for ZIP file](https://github.com/Niyad-Labs/Share-With-Node/releases/download/v1.0.0/sharewithnodee-1.0.0.Setup.zip)
+
+⚠️ Note:
+This app is not code-signed, so Windows may show a warning.
+
+How to Run:
+
+1. Extract the zip file
+2. Open ShareWithNode.exe
+3. If Windows shows warning:
+   - Click "More info"
+   - Click "Run anyway"
+
+This app is safe and built using Electron.
+And this is normal for indie developer apps.
 
 ## Screenshots
 
