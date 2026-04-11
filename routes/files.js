@@ -5,9 +5,9 @@ import fs from 'fs'
 
 const store = new Store();
 const router = express.Router()
-let ROOT_DIR = store.get("path");
 
 router.get('/', (req, res) => {
+    const ROOT_DIR = store.get("path");
 
     if (!req.session.loggedIn) {
         res.send("unauthorized access not allowed")
@@ -81,6 +81,7 @@ router.get('/video/', (req, res) => {
         res.send("unauthorized access is not allowed")
         return
     }
+    const ROOT_DIR = store.get("path");
     const filePath = path.join(ROOT_DIR, req.query.file);
     const fileName = path.basename(req.query.file)
     const cleanName = fileName.replace(/[\r\n"]/g, "").trim();
