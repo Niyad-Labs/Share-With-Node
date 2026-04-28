@@ -34,13 +34,22 @@ window.api.onConnectionError((data) => {
   const qrErr = document.createElement("span")
   const errdiv = document.getElementById("errordiv")
   qrErr.innerText = data
-  errordiv.append(qrErr)
+  errdiv.append(qrErr)
   errdiv.style.display = "block"
   setTimeout(() => {
     errdiv.style.display = "none"
   }, 4000);
 })
 
+window.api.onUpdateMsg((data) => {
+  const confirmUpdate = confirm(
+    `New version ${data.latestVersion} available. Update now?`
+  );
+
+  if (confirmUpdate) {
+    window.api.openExternal(data.url)
+  }
+})
 window.api.onQrImg((dataUrl) => {
   const qrdiv = document.getElementById("Qr")
   const qrimg = document.createElement("img")

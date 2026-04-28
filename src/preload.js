@@ -9,11 +9,17 @@ contextBridge.exposeInMainWorld("api", {
     onConnectionError: (callback) => {
         ipcRenderer.on("connection-error", (event, data) => callback(data))
     },
+    onUpdateMsg: (callback) => {
+        ipcRenderer.on("update-available", (event, data) => callback(data))
+    },
     onload: (callback) => {
         ipcRenderer.on("load", (event, data) => callback(data))
     },
     onUserConnected: (callback) => {
         ipcRenderer.on("connected-user", (event, data) => callback(data))
+    },
+    openExternal: (url) => {
+        ipcRenderer.send("open-url", url)
     },
     sendData: (data) => {
         ipcRenderer.send("send-Data", data)

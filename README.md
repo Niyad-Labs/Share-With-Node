@@ -9,6 +9,7 @@ videos over a local network using QR code-based connection
 - 🔐 Secure login system
 - 📁 File sharing over local network
 - 🎬 Stream video directly in browser (no download required)
+- 📺 Stream videos in external players like VLC
 - ⚡ Fast and lightweight
 
 ## Tech Stack
@@ -18,6 +19,17 @@ videos over a local network using QR code-based connection
 - Express.js
 - Vite
 - HTML, CSS, JavaScript
+
+## 🎬 Demo Video
+
+<div align="center">
+
+<video width="35%" controls>
+  <source src="screenshots/demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+</div>
 
 ## Download
 
@@ -51,7 +63,6 @@ And this is normal for indie developer apps.
 <img src="screenshots/13.jpeg" width="250">
 <img src="screenshots/14.jpeg" width="250">
 </div>
----
 
 ## 📲 Usage
 

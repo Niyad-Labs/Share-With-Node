@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import qrcode from 'qrcode'
@@ -17,11 +17,13 @@ import cors from 'cors'
 
 
 
+
 let mainWindow;
 const store = new Store();
 let ROOT_DIR = "";
 let token = crypto.randomBytes(16).toString("hex")
 dotenv.config()
+const currentVersion = app.getVersion();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -39,11 +41,19 @@ const createWindow = () => {
 
     maxWidth: 600,
     maxHeigth: 600,
+    nodeIntegration: false,
+    contextIsolation: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
   mainWindow.webContents.on("did-finish-load", () => {
+    checkForUpdates().then(result => {
+      if (result.updateAvailable) {
+        mainWindow.webContents.send("update-available", result);
+      }
+    });
+
     ROOT_DIR = store.get("path");
     const passwrd = store.get("password")
 
@@ -52,6 +62,7 @@ const createWindow = () => {
       return;
     }
     mainWindow.webContents.send("load", ROOT_DIR, true);
+
 
   });
 
@@ -111,6 +122,11 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+// to open browser for update
+ipcMain.on("open-url", async (event, url) => {
+  shell.openExternal(url)
+})
 
 ipcMain.on("send-Data", async (event, data) => {
   try {
@@ -215,4 +231,32 @@ ipcMain.handle("toggle-server", async () => {
 
 export function sendToRenderer(channel, data) {
   mainWindow.webContents.send(channel, data)
+}
+
+
+
+// update version checking function
+
+async function checkForUpdates() {
+  try {
+    const res = await fetch("https://api.github.com/repos/Niyad-Labs/Share-With-Node/releases/latest");
+    const data = await res.json();
+
+    const latestVersion = data.tag_name.replace("v", "");
+
+    if (latestVersion !== currentVersion) {
+
+      return {
+        updateAvailable: true,
+        latestVersion,
+        url: data.html_url
+      };
+    }
+
+    return { updateAvailable: false };
+
+  } catch (err) {
+    console.log("Update check failed:", err);
+    return { updateAvailable: false };
+  }
 }

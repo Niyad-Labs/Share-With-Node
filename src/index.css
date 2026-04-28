@@ -96,11 +96,24 @@ border: solid 1px #686868;
    color: #fff;
 }
 
-#errordiv{
+.errordiv{
      width: 100%;
     padding: 10px;
     height: min-content;
     background: red;
+    color: #fff;
+    min-height: 30px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: none;
+}
+
+.Updatediv{
+     width: 100%;
+    padding: 10px;
+    height: min-content;
+    background: rgb(0, 110, 255);
     color: #fff;
     min-height: 30px;
     position: absolute;

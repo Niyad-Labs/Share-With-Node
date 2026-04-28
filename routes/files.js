@@ -2,6 +2,7 @@ import express from 'express'
 import path from 'node:path'
 import Store from 'electron-store'
 import fs from 'fs'
+import mime from 'mime'
 
 const store = new Store();
 const router = express.Router()
@@ -57,7 +58,9 @@ a {
         }
 
         files.forEach(file => {
-            const filePath = path.join(relativePath, file.name);
+            const filePathfix = path.join(relativePath, file.name);
+            const filePath = filePathfix.replace(/\\/g, "/");
+
             const ext = path.extname(file.name)
             if (file.isDirectory()) {
                 html += `<a href="?path=${filePath}"><li><img src="/folder.jfif" alt="folder"><span> ${file.name}</span></li></a>`;
@@ -77,19 +80,17 @@ a {
 
 
 router.get('/video/', (req, res) => {
-    if (!req.session.loggedIn) {
-        res.send("unauthorized access is not allowed")
-        return
-    }
+
     const ROOT_DIR = store.get("path");
-    const filePath = path.join(ROOT_DIR, req.query.file);
+    const filePath = path.join(ROOT_DIR, req.query.file.replace(/\//g, "\\"));
     const fileName = path.basename(req.query.file)
     const cleanName = fileName.replace(/[\r\n"]/g, "").trim();
+
 
     if (!fs.existsSync(filePath)) {
         return res.status(404).send(`File not found ${filePath}`);
     }
-
+    const contentType = mime.getType(filePath) || "application/octent-stream"
     const stat = fs.statSync(filePath);
     const fileSize = stat.size;
     const range = req.headers.range;
@@ -108,7 +109,8 @@ router.get('/video/', (req, res) => {
             "Content-Range": `bytes ${start}-${end}/${fileSize}`,
             "Accept-Ranges": "bytes",
             "Content-Length": chunkSize,
-            "Content-Type": "video/mp4",
+            "Content-Type": contentType,
+            "connection": "keep-alive",
             "Content-Disposition": `inline;filename*=UTF-8''${encodeURIComponent(cleanName)}`
         });
 
@@ -116,7 +118,8 @@ router.get('/video/', (req, res) => {
     } else {
         res.writeHead(200, {
             "Content-Length": fileSize,
-            "Content-Type": "video/mp4",
+            "Content-Type": contentType,
+            "Accept-Ranges": "bytes",
             "Content-Disposition": `inline;filename*=UTF-8''${encodeURIComponent(cleanName)}`
         });
 
