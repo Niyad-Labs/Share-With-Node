@@ -22,22 +22,19 @@ videos over a local network using QR code-based connection
 
 ## 🎬 Demo Video
 
-<div align="center">
-
-<video width="35%" controls>
-  <source src="screenshots/demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
-</div>
+<p align="center">
+  <a href="https://drive.google.com/file/d/1NnxhlWA5Yzj55neqVKFlIsBeoUPiOsdR/view?usp=drivesdk">
+    <img src="screenshots/video_thumbnail2.jpg" width="500"/>
+  </a>
+</p>
 
 ## Download
 
 Download Latest Release
 
-👉 [Click here for EXE file](https://github.com/Niyad-Labs/Share-With-Node/releases/download/v1.0.0/sharewithnodee-1.0.0.Setup.exe)
+👉 [Click here for EXE file](https://github.com/Niyad-Labs/Share-With-Node/releases/download/v1.1.0/sharewithnodee-1.1.0.Setup.exe)
 
-👉 [Click here for ZIP file](https://github.com/Niyad-Labs/Share-With-Node/releases/download/v1.0.0/sharewithnodee-1.0.0.Setup.zip)
+👉 [Click here for ZIP file](https://github.com/Niyad-Labs/Share-With-Node/releases/download/v1.1.0/sharewithnodee-1.1.0.Setup.zip)
 
 ⚠️ Note:
 This app is not code-signed, so Windows may show a warning.
