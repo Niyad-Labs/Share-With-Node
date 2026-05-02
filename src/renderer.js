@@ -28,7 +28,7 @@
 
 import './index.css';
 const qrdiv = document.getElementById("Qr")
-const alreadypsetted = true
+let alreadypsetted = false
 
 window.api.onConnectionError((data) => {
   const qrErr = document.createElement("span")

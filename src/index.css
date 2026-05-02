@@ -96,7 +96,7 @@ border: solid 1px #686868;
    color: #fff;
 }
 
-.errordiv{
+#errordiv{
      width: 100%;
     padding: 10px;
     height: min-content;
