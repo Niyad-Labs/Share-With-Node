@@ -32,9 +32,9 @@ videos over a local network using QR code-based connection
 
 Download Latest Release
 
-👉 [Click here for EXE file](https://github.com/Niyad-Labs/Share-With-Node/releases/download/v1.1.0/sharewithnodee-1.1.0.Setup.exe)
+👉 [Click here for EXE file](https://github.com/Niyad-Labs/Share-With-Node/releases/download/v1.1.1/sharewithnodee-1.1.1.Setup.exe)
 
-👉 [Click here for ZIP file](https://github.com/Niyad-Labs/Share-With-Node/releases/download/v1.1.0/sharewithnodee-1.1.0.Setup.zip)
+👉 [Click here for ZIP file](https://github.com/Niyad-Labs/Share-With-Node/releases/download/v1.1.1/sharewithnodee-1.1.1.Setup.zip)
 
 ⚠️ Note:
 This app is not code-signed, so Windows may show a warning.
