@@ -90,11 +90,11 @@
 <body>
 
     <div class="container">
-        <h2>📁 Upload File</h2>
+        <h2>📁 Upload Files</h2>
 
-        <input type="file" id="fileInput">
+        <input type="file" id="fileInput" multiple>
 
-        <button onclick="uploadFile()">Upload</button>
+        <button onclick="uploadFiles()">Upload</button>
 
         <div class="progress-container">
             <progress id="progressBar" value="0" max="100"></progress>
@@ -103,35 +103,150 @@
     </div>
 
     <script>
-        function uploadFile() {
-            const file = document.getElementById("fileInput").files[0];
-            if (!file) return alert("Select a file");
 
-            const formData = new FormData();
-            formData.append("file", file);
+        async function uploadFiles() {
 
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", window.location.href, true);
+            const files = document.getElementById("fileInput").files;
 
-            xhr.upload.onprogress = function (e) {
-                if (e.lengthComputable) {
-                    const percent = (e.loaded / e.total) * 100;
-                    document.getElementById("progressBar").value = percent;
-                    document.getElementById("status").innerText =
-                        Math.round(percent) + "% uploaded";
-                }
-            };
+            if (files.length === 0) {
+                return alert("Select files");
+            }
 
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    document.getElementById("status").innerText = "✅ Upload complete!";
-                } else {
-                    document.getElementById("status").innerText = "❌ Upload failed!" + xhr.status;
-                }
-            };
+            for (const file of files) {
+                await uploadSingleFile(file);
+            }
 
-            xhr.send(formData);
+            document.getElementById("status").innerText =
+                "✅ All uploads completed";
         }
+
+        async function uploadSingleFile(file) {
+
+            const chunkSize = 5 * 1024 * 1024; // 5MB
+
+            const totalChunks = Math.ceil(file.size / chunkSize);
+
+            for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+
+                const start = chunkIndex * chunkSize;
+
+                const end = Math.min(
+                    start + chunkSize,
+                    file.size
+                );
+
+                const chunk = file.slice(start, end);
+
+                const formData = new FormData();
+
+                formData.append("chunk", chunk);
+
+                formData.append(
+                    "chunkIndex",
+                    chunkIndex
+                );
+
+                formData.append(
+                    "totalChunks",
+                    totalChunks
+                );
+
+                formData.append(
+                    "fileName",
+                    file.name
+                );
+
+                await sendChunk(
+                    formData,
+                    chunkIndex,
+                    totalChunks,
+                    file.name
+                );
+            }
+        }
+
+        function sendChunk(
+            formData,
+            chunkIndex,
+            totalChunks,
+            fileName
+        ) {
+
+            return new Promise((resolve, reject) => {
+
+                const xhr = new XMLHttpRequest();
+
+                xhr.open(
+                    "POST",
+                    window.location.href,
+                    true
+                );
+
+                xhr.upload.onprogress = function (e) {
+
+                    if (e.lengthComputable) {
+
+                        const currentChunkProgress =
+                            (e.loaded / e.total);
+
+                        const totalProgress =
+                            (
+                                (
+                                    chunkIndex +
+                                    currentChunkProgress
+                                ) / totalChunks
+                            ) * 100;
+
+                        document.getElementById(
+                            "progressBar"
+                        ).value = totalProgress;
+
+                        document.getElementById(
+                            "status"
+                        ).innerText =
+                            `Uploading ${fileName} : ${Math.round(totalProgress)}%`;
+                    }
+                };
+
+                xhr.onload = function () {
+
+                    if (xhr.status === 200) {
+
+                        if (chunkIndex + 1 === totalChunks) {
+
+                            document.getElementById(
+                                "status"
+                            ).innerText =
+                                `✅ ${fileName} uploaded`;
+                        }
+
+                        resolve();
+
+                    } else {
+
+                        document.getElementById(
+                            "status"
+                        ).innerText =
+                            `❌ Upload failed`;
+
+                        reject();
+                    }
+                };
+
+                xhr.onerror = function () {
+
+                    document.getElementById(
+                        "status"
+                    ).innerText =
+                        `❌ Network error`;
+
+                    reject();
+                };
+
+                xhr.send(formData);
+            });
+        }
+
     </script>
 
 </body>

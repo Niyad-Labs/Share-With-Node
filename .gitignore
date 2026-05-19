@@ -92,3 +92,6 @@ typings/
 out/
 
 .env
+
+temp/
+chunks/

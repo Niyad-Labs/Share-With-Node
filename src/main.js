@@ -183,8 +183,8 @@ const basePath = isDev ? "public" : path.join(process.resourcesPath, "public")
 
 const appServer = express();
 appServer.use(express.static(basePath));
-appServer.use(express.json())
-appServer.use(express.urlencoded({ extended: true }))
+appServer.use(express.json({ limit: "20gb" }))
+appServer.use(express.urlencoded({ extended: true, limit: "20gb" }))
 appServer.use(cors());
 // appServer.locals.token = token;
 appServer.use(session({
@@ -215,6 +215,7 @@ ipcMain.handle("toggle-server", async () => {
     server = appServer.listen(process.env.PORT_SERVER || 5147, "0.0.0.0", () => {
       console.log("Server running:5147 ");
     });
+    server.setTimeout(0)
     server.on("connection", (conn) => {
       connections.add(conn)
       conn.on("close", () => { connections.delete(conn) })
